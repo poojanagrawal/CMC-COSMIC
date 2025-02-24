@@ -22,6 +22,26 @@
 #include <stdlib.h>
 #include <math.h>
 #include "bse_wrap.h"
+#include <string.h>
+
+void initialize_metisse_front(){
+  initialize_metisse_front_cmc_();
+}
+
+void set_metisse_io_mode(int myid){
+  int mode = 0;
+  if (myid == 0){
+     set_file_mode_(&mode);
+  } else{
+     mode = 1;
+     set_file_mode_(&mode);
+  }
+}
+
+void set_metisse_inputs(char *PATH_TO_TRACKS,char *PATH_TO_HE_TRACKS){
+  strncpy(metissevars_.path_to_tracks, PATH_TO_TRACKS, 256);
+  strncpy(metissevars_.path_to_he_tracks, PATH_TO_HE_TRACKS, 256);
+}
 
 /**
 * @brief calculate metallicity constants
@@ -29,9 +49,9 @@
 * @param z ?
 * @param zpars ?
 */
-void bse_zcnsts(double *z, double *zpars, char *PATH_TO_TRACKS, char *PATH_TO_HE_TRACKS)
+void bse_zcnsts(double *z, double *zpars)
 {
-  zcnsts_(z, zpars, PATH_TO_TRACKS, PATH_TO_HE_TRACKS);
+  zcnsts_(z, zpars);
 }
 
 void bse_evolve_single(int *kw, double *mass, double *mt, double *r, double *lum,

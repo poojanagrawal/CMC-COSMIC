@@ -131,7 +131,9 @@ typedef struct{
 } bse_binary;
 
 /* prototypes for fortran BSE functions */
-void zcnsts_(double *z, double *zpars, char *PATH_TO_TRACKS, char *PATH_TO_HE_TRACKS);
+void initialize_metisse_front_cmc_();
+void set_file_mode_(int *mode);
+void zcnsts_(double *z, double *zpars);
 void bse_set_bcm_bpp_cols(void);
 void evolv2_(int *kstar, double *mass, double *tb, double *ecc, double *z, 
 	     double *tphysf, double *dtp, double *mass0, double *rad, double *lum,
@@ -151,9 +153,11 @@ void mix_(double *mass, double *mt, double *aj, int *kw, double *zpars, double *
 // note: these function names only work if in lowercase here, even though FORTRAN versions in uppercase.
 void comenv_(double *M01, double *M1, double *MC1, double *AJ1, double *JSPIN1, int *KW1, double *M02, double *M2, double *MC2, double *AJ2, double *JSPIN2, int *KW2, double *ZPARS, double *ECC, double *SEP, double *JORB, int *COEL, int *star1, int *star2, double *vk, double *kick_info, int *formation1, int *formation2, double *sigmahold, double *bhspin1, double *bhspin2, int *binstate, int *mergertype, int *jp, double *tphys,int *swtichedCE, double *rad, double *tms, double *evolve_type, int *disrupt, double * lumin, double * B_0, double * bacc, double * tacc, double * epoch, double * menv_bpp, double * renv_bpp, double *bkick);
 
-
 /* wrapped BSE functions */
-void bse_zcnsts(double *z, double *zpars, char *PATH_TO_TRACKS, char *PATH_TO_HE_TRACKS);
+void initialize_metisse_front();
+void set_metisse_inputs(char *PATH_TO_TRACKS,char *PATH_TO_HE_TRACKS);
+void set_metisse_io_mode(int myid);
+void bse_zcnsts(double *z, double *zpars);
 void bse_evolv2(int *kstar, double *mass0, double *mass, double *rad, double *lum, 
 		double *massc, double *radc, double *menv, double *renv, double *ospin,
                 double *B_0, double *bacc, double *tacc,
@@ -205,8 +209,10 @@ extern struct { double bcm[BCM_NUM_COLUMNS][BCM_NUM_ROWS], bpp[BPP_NUM_COLUMNS][
 extern struct { int n_col_bpp,col_inds_bpp[BCM_NUM_COLUMNS], n_col_bcm,col_inds_bcm[BCM_NUM_COLUMNS]; } col_;
 extern struct { double merger; long int id1_pass, id2_pass; long int using_cmc; } cmcpass_;
 extern struct { int using_metisse; int using_sse; } se_flags_;
+extern struct { char path_to_tracks[256]; char path_to_he_tracks[256]; } metissevars_;
 
 /* setters */
+
 void bse_set_idum(int idum); /* RNG seed (for NS birth kicks) */
 
 void bse_set_neta(double neta); /* Reimers mass-loss coefficent (neta*4x10^-13; 0.5 normally) */
